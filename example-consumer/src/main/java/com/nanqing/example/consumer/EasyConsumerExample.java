@@ -2,7 +2,9 @@ package com.nanqing.example.consumer;
 
 import com.nanqing.example.common.model.User;
 import com.nanqing.example.common.service.UserService;
-import com.nanqing.minirpc.proxy.ServiceProxyFactory;
+import com.nanqing.rpc.config.RpcConfig;
+import com.nanqing.rpc.proxy.ServiceProxyFactory;
+import com.nanqing.rpc.utils.ConfigUtils;
 
 
 public class EasyConsumerExample {
