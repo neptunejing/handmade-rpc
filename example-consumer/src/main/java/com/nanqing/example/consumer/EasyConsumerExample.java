@@ -10,7 +10,7 @@ import com.nanqing.rpc.utils.ConfigUtils;
 public class EasyConsumerExample {
 
     public static void main(String[] args) {
-        // 动态代理
+        // 动态代理（传入接口）
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
         user.setName("nanqing");
