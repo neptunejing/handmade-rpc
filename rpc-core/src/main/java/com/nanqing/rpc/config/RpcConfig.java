@@ -1,5 +1,6 @@
 package com.nanqing.rpc.config;
 
+import com.nanqing.rpc.serializer.SerializerKeys;
 import lombok.Data;
 
 /**
@@ -31,4 +32,9 @@ public class RpcConfig {
      * mock
      */
     private boolean mock = false;
+
+    /**
+     * 序列化器
+     */
+    private String serializer = SerializerKeys.JDK;
 }
