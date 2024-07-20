@@ -30,7 +30,7 @@ public class MockServiceProxy implements InvocationHandler {
                 return '\0';
             }
             if (type == short.class) {
-                return 0;
+                return (short) 0;
             }
             if (type == int.class) {
                 return 0;
