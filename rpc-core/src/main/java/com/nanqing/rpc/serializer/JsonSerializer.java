@@ -44,7 +44,6 @@ public class JsonSerializer implements Serializer {
         for (int i = 0; i < parameterTypes.length; i++) {
             Class<?> clazz = parameterTypes[i];
             // 如果类型不同，重新处理类型
-            // todo 写法意义
             if (!clazz.isAssignableFrom(args[i].getClass())) {
                 byte[] argBytes = OBJECT_MAPPER.writeValueAsBytes(args[i]);
                 args[i] = OBJECT_MAPPER.readValue(argBytes, clazz);

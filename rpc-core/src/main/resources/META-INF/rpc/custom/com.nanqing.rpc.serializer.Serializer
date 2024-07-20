@@ -1,0 +1,4 @@
+jdk=com.nanqing.rpc.serializer.JdkSerializer
+hessian=com.nanqing.rpc.serializer.HessianSerializer
+json=com.nanqing.rpc.serializer.JsonSerializer
+kryo=com.nanqing.rpc.serializer.KryoSerializer

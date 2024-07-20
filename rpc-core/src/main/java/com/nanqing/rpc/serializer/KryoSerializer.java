@@ -33,6 +33,6 @@ public class KryoSerializer implements Serializer {
         Input input = new Input(byteArrayOutputStream);
         T result = KRYO_THREAD_LOCAL.get().readObject(input, type);
         input.close();
-        return null;
+        return result;
     }
 }
