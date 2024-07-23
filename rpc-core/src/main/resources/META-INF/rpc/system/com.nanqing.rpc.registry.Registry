@@ -1,1 +1,1 @@
-etcd=com.nanqing.registry.EtcdRegistry
+etcd=com.nanqing.rpc.registry.EtcdRegistry

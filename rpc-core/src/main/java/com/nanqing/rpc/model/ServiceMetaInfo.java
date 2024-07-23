@@ -1,8 +1,18 @@
 package com.nanqing.rpc.model;
 
+import cn.hutool.core.util.StrUtil;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 服务元信息（注册信息）
  */
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ServiceMetaInfo {
     /**
      * 服务名称
@@ -12,6 +22,7 @@ public class ServiceMetaInfo {
     /**
      * 服务版本号
      */
+    @Builder.Default
     private String serviceVersion = "1.0";
 
     /**
@@ -27,6 +38,7 @@ public class ServiceMetaInfo {
     /**
      * 服务分组（暂未实现）
      */
+    @Builder.Default
     private String serviceGroup = "default";
 
     /**
@@ -43,6 +55,16 @@ public class ServiceMetaInfo {
      */
     public String getServiceNodeKey() {
         return String.format("%s/%s:%s", getServiceKey(), serviceHost, serviceVersion);
+    }
+
+    /**
+     * 获取完整服务地址
+     */
+    public String getServiceAddress() {
+        if (!StrUtil.contains(serviceHost, "http")) {
+            return String.format("http://%s:%s", serviceHost, servicePort);
+        }
+        return String.format("%s:%s", serviceHost, servicePort);
     }
 }
 
