@@ -1,7 +1,10 @@
 package com.nanqing.rpc;
 
+import com.nanqing.rpc.config.RegistryConfig;
 import com.nanqing.rpc.config.RpcConfig;
 import com.nanqing.rpc.constant.RpcConstant;
+import com.nanqing.rpc.registry.Registry;
+import com.nanqing.rpc.registry.RegistryFactory;
 import com.nanqing.rpc.utils.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +21,12 @@ public class RpcApplication {
      */
     public static void init(RpcConfig newRpcConfig) {
         rpcConfig = newRpcConfig;
-        log.info("com.nanqing.rpc.RpcApplication init, config:{}", newRpcConfig.toString());
+        log.info("RpcApplication init, config: {}", newRpcConfig.toString());
+        // 注册中心初始化
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig(); // 先从配置读取
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry()); // 根据配置获取实例
+        registry.init(registryConfig);
+        log.info("Registry init, config: {}", registry);
     }
 
     /**
