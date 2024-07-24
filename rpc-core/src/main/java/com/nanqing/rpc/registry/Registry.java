@@ -32,5 +32,5 @@ public interface Registry {
     /**
      * 服务销毁
      */
-    void destory();
+    void destroy();
 }

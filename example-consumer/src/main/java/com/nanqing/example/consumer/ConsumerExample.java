@@ -12,9 +12,6 @@ public class ConsumerExample {
         user.setName("nanqing");
 
         // 调用
-        var num = userService.getNumer();
-        System.out.println("get number: " + num);
-
         User newUser = userService.getUser(user);
         if (newUser != null) {
             System.out.println("get user: " + newUser.getName());

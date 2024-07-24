@@ -54,7 +54,7 @@ public class ServiceMetaInfo {
      * 获取服务注册节点键名
      */
     public String getServiceNodeKey() {
-        return String.format("%s/%s:%s", getServiceKey(), serviceHost, serviceVersion);
+        return String.format("%s/%s:%s", getServiceKey(), serviceHost, servicePort);
     }
 
     /**

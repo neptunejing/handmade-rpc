@@ -78,7 +78,7 @@ public class EtcdRegistry implements Registry {
     }
 
     @Override
-    public void destory() {
+    public void destroy() {
         log.info("当前节点下线");
         // 释放资源
         if (kvClient != null) {
