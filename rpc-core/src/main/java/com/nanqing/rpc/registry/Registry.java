@@ -3,7 +3,9 @@ package com.nanqing.rpc.registry;
 import com.nanqing.rpc.config.RegistryConfig;
 import com.nanqing.rpc.model.ServiceMetaInfo;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 注册中心
@@ -33,4 +35,9 @@ public interface Registry {
      * 服务销毁
      */
     void destroy();
+
+    /**
+     * 心跳检测
+     */
+    void heartBeat();
 }
