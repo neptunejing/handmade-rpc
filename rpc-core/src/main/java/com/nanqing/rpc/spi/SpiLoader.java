@@ -30,12 +30,12 @@ public class SpiLoader {
     /**
      * 系统 SPI 目录
      */
-    private static final String RPC_SYSTEM_SPI_DIR = "META-INF/rpc/system";
+    private static final String RPC_SYSTEM_SPI_DIR = "META-INF/rpc/system/";
 
     /**
      * 用户自定义 SPI 目录
      */
-    private static final String RPC_CUSTOM_SPI_DIR = "META-INF/rpc/custom";
+    private static final String RPC_CUSTOM_SPI_DIR = "META-INF/rpc/custom/";
 
     /**
      * 扫描路径
@@ -78,7 +78,7 @@ public class SpiLoader {
         Class<?> implClass = typeClassMap.get(key);
         // 优先从缓存中获取指定类型的实例
         String implClassName = implClass.getName();
-        if (!implClassName.equals(typeName)) {
+        if (!instanceCache.containsKey(implClassName)) {
             try {
                 instanceCache.put(implClassName, implClass.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
@@ -86,7 +86,7 @@ public class SpiLoader {
                 throw new RuntimeException(errorMsg, e);
             }
         }
-        return (T) instanceCache.get(key);
+        return (T) instanceCache.get(implClassName);
     }
 
     /**
