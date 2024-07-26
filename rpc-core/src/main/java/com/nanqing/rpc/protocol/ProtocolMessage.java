@@ -1,5 +1,7 @@
 package com.nanqing.rpc.protocol;
 
+import com.nanqing.rpc.model.RpcRequest;
+import com.nanqing.rpc.model.RpcResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,11 @@ public class ProtocolMessage<T> {
      * 消息头
      */
     private Header header;
+
+    /**
+     * 消息体
+     */
+    private T body;
 
     /**
      * 协议消息头

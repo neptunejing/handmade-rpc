@@ -1,9 +1,12 @@
 package com.nanqing.rpc.protocol;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public enum ProtocolMessageSerializerEnum {
     JDK(0, "jdk"),
     JSON(1, "json"),
