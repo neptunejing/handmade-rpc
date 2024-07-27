@@ -1,9 +1,11 @@
 package com.nanqing.rpc.server.tcp;
 
 import com.nanqing.rpc.server.HttpServer;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.NetServer;
+import io.vertx.core.parsetools.RecordParser;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,16 +26,34 @@ public class VertxTcpServer implements HttpServer {
 
         // 处理请求
         server.connectHandler(socket -> {
-            // 处理连接
-            socket.handler(buffer -> {
-                // 处理收到的字节数组
-                byte[] requestData = buffer.getBytes();
-                // 这里进行自定义字节数组梳理逻辑（解析请求、调用服务、构造响应）
-                byte[] responseData = handleRequest(requestData);
-                // 发送响应
-                socket.write(Buffer.buffer(responseData));
+            // 构造 parser
+            RecordParser parser = RecordParser.newFixed(8); // header 长度为固定的 8 bytes
+            parser.setOutput(new Handler<Buffer>() {
+                // 初始化
+                int size = -1;
+                // 一次完整的读取（header + body）
+                Buffer resultBuffer = Buffer.buffer();
 
+                @Override
+                public void handle(Buffer buffer) {
+                    if (size == -1) {
+                        size = buffer.getInt(4); // 先确认 body 长度
+                        parser.fixedSizeMode(size); // 修改 parser 的固定长度
+                        // 写入 header
+                        resultBuffer.appendBuffer(buffer);
+                    } else {
+                        // 写入 body
+                        resultBuffer.appendBuffer(buffer);
+                        log.info(resultBuffer.toString());
+                        // 重置一轮
+                        parser.fixedSizeMode(8);
+                        size = -1;
+                        resultBuffer = Buffer.buffer();
+                    }
+                }
             });
+
+            socket.handler(parser);
         });
 
         // 启动 TCP server 并监听端口
