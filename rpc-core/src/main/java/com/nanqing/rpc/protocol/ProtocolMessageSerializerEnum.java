@@ -40,4 +40,16 @@ public enum ProtocolMessageSerializerEnum {
         }
         return null;
     }
+
+    /**
+     * 根据 value 获取枚举
+     */
+    public static ProtocolMessageSerializerEnum getEnumByValue(String value) {
+        for (ProtocolMessageSerializerEnum serializer : values()) {
+            if (serializer.value.equals(value)) {
+                return serializer;
+            }
+        }
+        return null;
+    }
 }

@@ -10,6 +10,8 @@ import com.nanqing.rpc.registry.Registry;
 import com.nanqing.rpc.registry.RegistryFactory;
 import com.nanqing.rpc.server.HttpServer;
 import com.nanqing.rpc.server.VertxHttpServer;
+import com.nanqing.rpc.server.tcp.VertxTcpServer;
+import io.vertx.core.Vertx;
 
 public class ProviderExample {
     public static void main(String[] args) {
@@ -35,8 +37,8 @@ public class ProviderExample {
             throw new RuntimeException(e);
         }
 
-        // 启动服务
-        HttpServer httpServer = new VertxHttpServer();
-        httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());;
+        // 启动 TCP 服务
+        VertxTcpServer vertxTcpServer = new VertxTcpServer();
+        vertxTcpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
     }
 }
