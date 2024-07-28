@@ -1,5 +1,7 @@
 package com.nanqing.rpc.config;
 
+import com.nanqing.rpc.loadbalancer.LoadBalancer;
+import com.nanqing.rpc.loadbalancer.LoadBalancerKeys;
 import com.nanqing.rpc.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -26,7 +28,7 @@ public class RpcConfig {
     /**
      * 服务器端口号
      */
-    private Integer serverPort = 8080;
+    private Integer serverPort = 8082;
 
     /**
      * mock
@@ -42,4 +44,9 @@ public class RpcConfig {
      * 注册中心配置
      */
     private RegistryConfig registryConfig = new RegistryConfig();
+
+    /**
+     * 负载均衡器配置
+     */
+    private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
 }

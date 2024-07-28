@@ -4,6 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import com.nanqing.rpc.RpcApplication;
 import com.nanqing.rpc.config.RpcConfig;
 import com.nanqing.rpc.constant.RpcConstant;
+import com.nanqing.rpc.loadbalancer.LoadBalancer;
+import com.nanqing.rpc.loadbalancer.LoadBalancerFactory;
 import com.nanqing.rpc.model.RpcRequest;
 import com.nanqing.rpc.model.RpcResponse;
 import com.nanqing.rpc.model.ServiceMetaInfo;
@@ -13,7 +15,9 @@ import com.nanqing.rpc.server.tcp.VertxTcpClient;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ServiceProxy implements InvocationHandler {
     @Override
@@ -39,7 +43,14 @@ public class ServiceProxy implements InvocationHandler {
             if (CollUtil.isEmpty(serviceMetaInfoList)) {
                 throw new RuntimeException("暂无无服务地址");
             }
-            ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
+
+            // 负载均衡
+            LoadBalancer loadBalancer = LoadBalancerFactory.getLoadBalancer(rpcConfig.getLoadBalancer());
+            // 将调用的方法名作为负载均衡参数
+            Map<String, Object> requestParams = new HashMap<>();
+            requestParams.put("methodName", rpcRequest.getMethodName());
+            ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
+            System.out.println(selectedServiceMetaInfo.getServiceAddress());
 
             // 发出 TCP 请求
             RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
