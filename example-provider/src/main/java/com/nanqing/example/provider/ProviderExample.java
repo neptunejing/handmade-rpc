@@ -8,10 +8,7 @@ import com.nanqing.rpc.model.ServiceMetaInfo;
 import com.nanqing.rpc.registry.LocalRegistry;
 import com.nanqing.rpc.registry.Registry;
 import com.nanqing.rpc.registry.RegistryFactory;
-import com.nanqing.rpc.server.HttpServer;
-import com.nanqing.rpc.server.VertxHttpServer;
 import com.nanqing.rpc.server.tcp.VertxTcpServer;
-import io.vertx.core.Vertx;
 
 public class ProviderExample {
     public static void main(String[] args) {

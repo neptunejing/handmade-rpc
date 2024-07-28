@@ -25,36 +25,7 @@ public class VertxTcpServer implements HttpServer {
         NetServer server = vertx.createNetServer();
 
         // 处理请求
-        server.connectHandler(socket -> {
-            // 构造 parser
-            RecordParser parser = RecordParser.newFixed(8); // header 长度为固定的 8 bytes
-            parser.setOutput(new Handler<Buffer>() {
-                // 初始化
-                int size = -1;
-                // 一次完整的读取（header + body）
-                Buffer resultBuffer = Buffer.buffer();
-
-                @Override
-                public void handle(Buffer buffer) {
-                    if (size == -1) {
-                        size = buffer.getInt(4); // 先确认 body 长度
-                        parser.fixedSizeMode(size); // 修改 parser 的固定长度
-                        // 写入 header
-                        resultBuffer.appendBuffer(buffer);
-                    } else {
-                        // 写入 body
-                        resultBuffer.appendBuffer(buffer);
-                        log.info(resultBuffer.toString());
-                        // 重置一轮
-                        parser.fixedSizeMode(8);
-                        size = -1;
-                        resultBuffer = Buffer.buffer();
-                    }
-                }
-            });
-
-            socket.handler(parser);
-        });
+        server.connectHandler(new TcpServerHandler());
 
         // 启动 TCP server 并监听端口
         server.listen(port, result -> {
