@@ -1,0 +1,2 @@
+no=com.nanqing.rpc.fault.retry.NoRetryStrategy
+fixedInterval=com.nanqing.rpc.fault.retry.FixedIntervalRetryStrategy

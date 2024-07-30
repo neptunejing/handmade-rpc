@@ -4,6 +4,10 @@ import cn.hutool.core.collection.CollUtil;
 import com.nanqing.rpc.RpcApplication;
 import com.nanqing.rpc.config.RpcConfig;
 import com.nanqing.rpc.constant.RpcConstant;
+import com.nanqing.rpc.fault.retry.RetryStrategy;
+import com.nanqing.rpc.fault.retry.RetryStrategyFactory;
+import com.nanqing.rpc.fault.tolerant.TolerantStrategy;
+import com.nanqing.rpc.fault.tolerant.TolerantStrategyFactory;
 import com.nanqing.rpc.loadbalancer.LoadBalancer;
 import com.nanqing.rpc.loadbalancer.LoadBalancerFactory;
 import com.nanqing.rpc.model.RpcRequest;
@@ -52,12 +56,21 @@ public class ServiceProxy implements InvocationHandler {
             ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
             System.out.println(selectedServiceMetaInfo.getServiceAddress());
 
-            // 发出 TCP 请求
-            RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
+            // 使用重试机制发出 TCP 请求
+            RpcResponse rpcResponse;
+            try {
+                RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+                rpcResponse = retryStrategy.doRetry(() ->
+                        VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+                );
+            } catch (Exception e) {
+                // 容错机制
+                TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+                rpcResponse = tolerantStrategy.doTolerant(null, e);
+            }
             return rpcResponse.getData();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("调用失败");
+            throw new RuntimeException("调用失败", e);
         }
     }
 }
