@@ -2,10 +2,14 @@ package com.nanqing.example.consumer;
 
 import com.nanqing.example.common.model.User;
 import com.nanqing.example.common.service.UserService;
+import com.nanqing.rpc.bootstrap.ConsumerBootstrap;
 import com.nanqing.rpc.proxy.ServiceProxyFactory;
 
 public class ConsumerExample {
     public static void main(String[] args) {
+        // 服务消费者初始化
+        ConsumerBootstrap.init();
+
         // 获取代理（传入接口）
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
