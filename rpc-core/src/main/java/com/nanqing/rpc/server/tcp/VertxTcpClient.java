@@ -70,6 +70,9 @@ public class VertxTcpClient {
                 });
 
         RpcResponse rpcResponse = rpcResponseFuture.get();
+        if (rpcResponse.getException() != null) {
+            throw new RuntimeException("RPC 响应携带异常", rpcResponse.getException());
+        }
         netClient.close();
         return rpcResponse;
     }
